@@ -1,0 +1,20 @@
+// C++ program to demonstrate 
+// working of string find to 
+// search a string
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Driver code
+int main()
+{
+string str = "geeksforgeeks a computer science";
+
+// Only search first 5 characters 
+// of "geeks.practice"
+size_t found = str.find("geeks.practice", 
+						0, 5);
+if (found != string::npos)
+	cout << found << endl;
+return 0;
+}
