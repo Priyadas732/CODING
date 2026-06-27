@@ -25,7 +25,7 @@ public:
             int ans = length(key,freq,mp);
             max_len = max(max_len, ans);
         }
-        
+        int one_count = mp[1];
 
         if(mp[1]%2!=0) return max(max_len,mp[1]);
         return  max(max_len,mp[1]-1);
