@@ -13,8 +13,8 @@ public:
     }
     int integerBreak(int n) {
         memset(dp,-1,sizeof(dp));
-        solve(n);
-        sort(rbegin(dp), rend(dp));
-        return dp[0];
+        
+        // sort(rbegin(dp), rend(dp));
+        return solve(n);
     }
 };
