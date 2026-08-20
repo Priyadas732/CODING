@@ -3,7 +3,7 @@ public:
     bool isPossible(int k, vector<int>& piles, int h){
         long long t=0;
         for(auto pile: piles){
-            t += ceil((double)pile/k);
+            t += (pile+k-1)/k; //ceil(a / b) = (a + b - 1) / b
         }
        
         if(t <= h)return true;
