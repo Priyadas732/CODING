@@ -6,6 +6,7 @@ public:
         ll correctedCount = 0;
         int n = coins.size();
 
+        // 2^n * n* log(maxCoin)
         for(int expressions = 1; expressions <= (1<<n)-1; expressions++){
             // 2^n-1 expression
             ll lcm = 0;
@@ -37,6 +38,7 @@ public:
         ll l = 1;
         ll r = (ll)(*max_element(begin(coins), end(coins)))*k;
 
+        // log(maxCoin * k) * 2^n * n* log(maxCoin)
         while(l <= r){
             ll mid = l + (r-l)/2;
 
