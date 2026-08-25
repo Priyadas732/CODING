@@ -1,18 +1,28 @@
 class Solution {
 public:
     bool sumGame(string A) {
-        int sum[2] = {0, 0}, q[2] = {0, 0};
         int n = A.length();
-
-        for (int i = 0; i < n; i++) {
-            int j = i / (n >> 1);
-            if (A[i] == '?')
-                q[j]++;
-            else
-                sum[j] += A[i] - '0';
+        int q1=0;
+        int q2=0;
+        int fhs = 0;
+        int shs = 0;
+        for(int i=0;i<n;i++){
+            if(i<n/2){
+                if(A[i]=='?') q1++;
+                else fhs += A[i]-'0';
+            }
+            else{
+                if(A[i]=='?') q2++;
+                else shs += A[i]-'0';
+            }
         }
 
-        return ((q[0] + q[1]) & 1) ||
-               ((sum[0] - sum[1]) << 1) != (q[1] - q[0]) * 9;
+        cout<<fhs<<" "<<shs;
+        if((q1+q2)%2!=0)return true;
+        if(fhs == shs && q1 == q2 )return false;
+        if(fhs + ((q1-q2)/2)*9 == shs){
+            return false;
+        }
+        return true;
     }
 };
