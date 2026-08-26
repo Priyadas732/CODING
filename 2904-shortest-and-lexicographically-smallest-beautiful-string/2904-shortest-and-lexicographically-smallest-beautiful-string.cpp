@@ -5,7 +5,9 @@ public:
         int left = 0;
         int ones = 0;
 
-        string ans ="";
+        int bestLI=-1;
+        int bestLen = INT_MAX;
+
         for(int right = 0;right<n;right++){
             if(s[right]=='1')ones++;
 
@@ -22,13 +24,21 @@ public:
                     left++;
                 }
 
-                string curr = s.substr(left, right-left+1);
+                int len = right-left+1;
 
-                if(ans=="" || ans.size() > curr.size() || (curr.size() == ans.size() && curr < ans)){
-                    ans = curr;
+                if(bestLen > len){
+                    bestLen = len;
+                    bestLI = left;
+                }else if(bestLen == len){
+                    // lexicographically smallest
+                    if(s.compare(left, len, s, bestLI, bestLen) < 0){
+                        bestLI = left;
+                    }
                 }
             }
         } 
-        return ans;
+
+        if(bestLI==-1)return "";
+        return s.substr(bestLI, bestLen);
     }
 };
