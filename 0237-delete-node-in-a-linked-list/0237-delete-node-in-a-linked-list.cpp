@@ -18,5 +18,7 @@ public:
         }
 
         prev->next = NULL;
+
+        delete(node);
     }
 };
