@@ -11,17 +11,26 @@ public:
     ListNode *detectCycle(ListNode *head) {
         if(head==NULL || head->next==NULL)return NULL;
 
-        ListNode* node = head;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        ListNode* p = head;
 
-        set<ListNode*>st;
-        while(node->next !=NULL){
-            if(st.find(node) != st.end()){
-                return node;
+        while(fast!=NULL && fast->next !=NULL){
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if(slow==fast){
+                break;
             }
-
-            st.insert(node);
-            node = node->next;
         }
-        return NULL;
+
+        if(slow !=fast) return NULL;
+        
+        while(p!=slow){
+            p = p->next;
+            slow = slow->next;
+        }
+        return p;
+        
     }
 };
