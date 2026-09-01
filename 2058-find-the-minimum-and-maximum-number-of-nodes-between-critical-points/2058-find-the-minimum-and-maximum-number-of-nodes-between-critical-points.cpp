@@ -1,28 +1,49 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
     vector<int> nodesBetweenCriticalPoints(ListNode* head) {
-        int Min = 100000, i = 1;
-        int c[2] = {0, 0};
+        if(!head || !head->next || !head->next->next)return {-1,-1};
 
-        auto prev = head, curr = head->next, nxt = head->next->next;
+        int firstIndex = -1;
+        int prevIndex = -1;
+        int currIndex = 1;
 
-        auto isCrit = [&]() {
-            auto x = prev->val, y = curr->val, z = nxt->val;
-            return (x < y && y > z) || (x > y && y < z);
-        };
+        ListNode* prev = head;
+        ListNode* curr = head->next;
+        ListNode* nxt = head->next->next;
 
-        while (nxt) {
-            if (isCrit()) {
-                if (c[0]) Min = min(Min, i - c[c[1] > 0]);
-                c[c[0] > 0] = i;
+        int minDiff = INT_MAX;
+
+        while(nxt !=NULL){
+            if((curr->val > prev->val && curr->val > nxt->val) || (curr->val < prev->val && curr->val < nxt->val)){
+                if(firstIndex ==-1){
+                    firstIndex = currIndex;
+                }else{
+                    minDiff = min(minDiff, currIndex - prevIndex);
+                }
+
+                prevIndex = currIndex;
             }
 
-            prev = curr; curr = nxt;
-            nxt = nxt->next; i++;
+            prev = curr;
+            curr = nxt;
+            nxt = nxt->next;
+            currIndex++;
         }
 
-        if (c[1]) return {Min, c[1] - c[0]};
+        if(minDiff==INT_MAX)return {-1,-1};
 
-        return {-1, -1};
+        int maxDiff = prevIndex - firstIndex;
+
+        return {minDiff, maxDiff};
     }
 };
