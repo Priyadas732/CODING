@@ -1,25 +1,23 @@
 class Solution {
 public:
     int maximumPopulation(vector<vector<int>>& logs) {
-        vector<int>diff(2051,0);
-
+        
+        map<int,int>mp;
         for(auto &it: logs){
             int s = it[0];
             int e = it[1];
-
-            diff[s] += 1;
-            diff[e] -= 1;
-
+            mp[s]+=1;
+            mp[e]-=1;
         }
 
         int maxS = 0;
         int year = 0;
-
-        for(int i=1;i<2051;i++){
-            diff[i] += diff[i-1];
-            if(diff[i] > maxS){
-                maxS = diff[i];
-                year = i;
+        int sum = 0;
+        for(auto [y,v]: mp){
+            sum += v;
+            if(sum > maxS){
+                maxS = sum;
+                year = y;
             }
         }
 
