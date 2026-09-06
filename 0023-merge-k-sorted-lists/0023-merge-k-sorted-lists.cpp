@@ -10,13 +10,17 @@
  */
 class Solution {
 public:
-    struct Compare {
-        bool operator()(ListNode* a, ListNode* b) {
-            return a->val > b->val;  // Min-heap
-        }
-    };
+    // struct Compare {
+    //     bool operator()(ListNode* a, ListNode* b) {
+    //         return a->val > b->val;  // Min-heap
+    //     }
+    // };
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        priority_queue<ListNode*, vector<ListNode*>, Compare>pq;
+
+        auto lambda = [](ListNode* a, ListNode* b) {
+            return a->val > b->val;  // Min-heap
+        };
+        priority_queue<ListNode*, vector<ListNode*>, decltype(lambda)>pq;
 
         for(auto head: lists){
             if(head != nullptr)
