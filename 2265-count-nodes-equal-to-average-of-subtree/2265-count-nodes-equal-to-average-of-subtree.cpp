@@ -11,30 +11,23 @@
  */
 class Solution {
 public:
-    pair<int,int>getSumCount(TreeNode* root){
+    pair<int,int>dfs(TreeNode* root, int & ans){
         if(!root)return {0,0};
 
-        auto left = getSumCount(root->left);
-        auto right = getSumCount(root->right);
+        auto [leftSum, leftCount] = dfs(root->left, ans);
+        auto [rightSum, rightCount] = dfs(root->right, ans);
 
-        int sum = root->val + left.first + right.first;
-        int count = 1 + left.second + right.second;
+        int sum = root->val + leftSum + rightSum;
+        int count = 1 + leftCount + rightCount;
 
+        if(root->val == sum/count)ans++;
+        
         return {sum, count};
     }
-    void solve(TreeNode* root, int &ans){
-        if(!root) return;
-
-        auto [sum, count] = getSumCount(root);
-
-        if(root->val == sum/count) ans++;
-
-        solve(root->left, ans);
-        solve(root->right, ans);
-    }
+    
     int averageOfSubtree(TreeNode* root) {
         int ans = 0;
-        solve(root, ans);
+        dfs(root, ans);
         return ans;
     }
 };
