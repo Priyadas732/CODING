@@ -1,27 +1,37 @@
 class Solution {
 public:
     int totalNumbers(vector<int>& digits) {
-        int n = digits.size();
-        set<int>st;
+        vector<int>freq(10,0);
 
-        for(int i=0;i<n;i++){
-            if(digits[i]==0)continue;
-
-            for(int j=0;j<n;j++){
-                if(i==j)continue;
-
-                for(int k=0;k<n;k++){
-                    if(k==i || k==j)continue;
-
-                    if(digits[k]%2 !=0)continue;
-
-                    int num = digits[i]*100 + digits[j]*10 + digits[k];
-
-                    st.insert(num);
-                }
-            }
+        for(int n: digits){
+            freq[n]++;
         }
 
-        return st.size();
+        int ans = 0;
+
+        // thundred place number
+        for(int a=1;a<=9;a++){
+            if(freq[a]==0)continue;
+
+            freq[a]--;
+
+            //ten place digit
+            for(int b=0;b<=9;b++){
+                if(freq[b]==0)continue;
+
+                freq[b]--;
+
+                // one place digit
+                for(int c=0;c<=8; c +=2){
+                    if(freq[c] > 0){
+                        ans++;
+                    }
+                }
+                freq[b]++;
+            }
+            freq[a]++;
+        }
+
+        return ans;
     }
 };
