@@ -18,37 +18,33 @@
 
 class NestedIterator {
 public:
-    vector<int>ans;
-    stack<NestedInteger*>st; // now store address of obj instead of storing object itself
-    NestedIterator(vector<NestedInteger> &nestedList) {
+    queue<int>q;
+    void flatten(vector<NestedInteger> &nestedList){
         int n = nestedList.size();
-        for(int i=n-1;i>=0;i--){
-            st.push(&nestedList[i]); // &obj
+        
+        for(int i=0;i<n;i++){
+            NestedInteger obj = nestedList[i];
+            if(obj.isInteger()){
+                q.push(obj.getInteger());
+            }
+            else{
+                flatten(obj.getList());
+            }
         }
+    }
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        flatten(nestedList);
     }
     
     int next() {
-        int num = st.top()->getInteger();
-        st.pop();
-
+        int num = q.front();
+        q.pop();
         return num;
     }
     
     bool hasNext() {
-        if(st.empty())return false;
-        
-        while(!st.empty()){
-            NestedInteger* curr = st.top();
-
-            if(curr->isInteger())return true;
-
-            st.pop();
-            vector<NestedInteger>& vec = curr->getList();
-            for(int i=vec.size()-1;i>=0;i--){
-                st.push(&vec[i]);
-            }
-        }
-        return false;
+        if(q.empty())return false;
+        return true;
     }
 };
 
