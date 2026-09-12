@@ -10,38 +10,36 @@
  */
 class Solution {
 public:
-    // struct Compare {
-    //     bool operator()(ListNode* a, ListNode* b) {
-    //         return a->val > b->val;  // Min-heap
-    //     }
-    // };
+    int n;
+    ListNode* merge(ListNode* L1, ListNode* L2){
+        if(L1==nullptr)return L2;
+        if(L2==NULL) return L1;
+
+        if(L1->val < L2->val){
+            L1->next = merge(L1->next, L2);
+            return L1;
+        }else{
+            L2->next = merge(L1, L2->next);
+            return L2;
+        }
+        return NULL;
+    }
+    ListNode* divideLinkedList(vector<ListNode*>& lists, int st, int end){
+        if(st > end) return NULL;
+
+        if(st == end){
+            return lists[st];
+        }
+
+        int m = st + (end-st)/2;
+        ListNode* L1 = divideLinkedList(lists, st,m);
+        ListNode* L2 = divideLinkedList(lists, m+1, end); 
+
+        return merge(L1, L2);
+    }
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-
-        auto lambda = [](ListNode* a, ListNode* b) {
-            return a->val > b->val;  // Min-heap
-        };
-        priority_queue<ListNode*, vector<ListNode*>, decltype(lambda)>pq;
-
-        for(auto head: lists){
-            if(head != nullptr)
-                pq.push(head);
-        }
-
-        ListNode* head = NULL;
-        ListNode* tail = head;
-        while(!pq.empty()){
-            ListNode* curr = pq.top();
-            pq.pop();
-            if(curr->next !=NULL)pq.push(curr->next);
-            if(head==NULL){
-                head = curr;
-                tail = head;
-            }else{
-                tail->next =  curr;
-                tail = tail->next;
-            }
-        }
-
-        return head;
+        n = lists.size();
+        if(n==0) return NULL;
+        return divideLinkedList(lists,0,n-1);
     }
 };
