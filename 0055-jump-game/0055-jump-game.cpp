@@ -1,17 +1,19 @@
 class Solution {
 public:
-    bool f(int ind,vector<int>&dp,vector<int>&arr){
-        if(ind>=arr.size()-1) return true;
-        if(arr[ind]==0) return false;
-        if(dp[ind]!=-1) return dp[ind];
-        for(int i=1;i<=arr[ind];i++){
-            if(f(ind+i,dp,arr)) return dp[ind] = true;
+    int n;
+    bool go(int idx, vector<int>& nums, vector<int>&dp){
+        if(idx==n-1)return true;
+        if(nums[idx]==0)return false;
+
+        if(dp[idx] !=-1)return dp[idx];
+        for(int i=1;i<=nums[idx];i++){
+            if(go(idx+i, nums,dp)) return dp[idx] = true;
         }
-        return dp[ind] = false;
+        return dp[idx] = false;
     }
     bool canJump(vector<int>& nums) {
-        int n = nums.size();
+        n = nums.size();
         vector<int>dp(n,-1);
-        return f(0,dp,nums);
+        return go(0, nums,dp);
     }
 };
