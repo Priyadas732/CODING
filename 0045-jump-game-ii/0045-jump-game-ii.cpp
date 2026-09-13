@@ -1,23 +1,20 @@
 class Solution {
 public:
-    int n;
-    int t[10001];
-    int solve(int idx, vector<int>& nums){
-        if(idx>=n-1)return 0;
-        
-        if(t[idx] !=-1) return t[idx];
-
-        int minJumps = 1e9;
-        for(int i=1;i<=nums[idx];i++){
-            if(idx+i<n){
-                minJumps = min(minJumps, 1 +  solve(idx+i, nums));
-            }
-        }
-        return t[idx] = minJumps;
-    }
     int jump(vector<int>& nums) {
-        n = nums.size();
-        memset(t, -1, sizeof(t));
-        return solve(0,nums);
+        int n = nums.size(); 
+        int jumps =  0;
+        int l=0, r=0;
+        //TC -> O(N) SC-> O(1)
+        while(r<n-1){
+            int farthest = 0;
+            for(int j=l;j<=r;j++){
+                farthest = max(j+nums[j], farthest);
+            }
+            l = r+1;
+            r = farthest;
+            jumps++;
+        }
+
+        return jumps;
     }
 };
