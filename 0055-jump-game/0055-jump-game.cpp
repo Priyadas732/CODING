@@ -4,7 +4,7 @@ public:
         int n = nums.size();
         vector<int>v(n, false);
         v[0] = true;
-        for(int i=1;i<n;i++){
+        for(int i=1;i<n;i++){ // O(n^2)
             int j = i-1;
             while(j>=0){
                 if(v[j]==true && j+nums[j] >= i){
