@@ -22,7 +22,7 @@ public:
         int grow = 0;
         int slide = 0;
 
-        if(isPalindrome(s,i,j)){
+        if(isPalindrome(s,i,j)){// O(N)
             take = 1 + solve(s,k, j+1, j+k);
             grow = solve(s,k,i,j+1);
             slide = solve(s, k,i+1, j+1);
@@ -38,8 +38,9 @@ public:
     int maxPalindromes(string s, int k) {
         n = s.size();
         if(k==1)return n;
-        
-        memset(dp, -1, sizeof(dp));
+        // T.C : O(n^3)
+        // S.C : O(n^2)
+        memset(dp, -1, sizeof(dp));// O(N^2)
         int res = solve(s,k,0,k-1);
 
         return res;
