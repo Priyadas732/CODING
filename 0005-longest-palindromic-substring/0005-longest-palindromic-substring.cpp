@@ -1,33 +1,34 @@
+
 class Solution {
 public:
-    
+    int t[1001][1001];
+
     string longestPalindrome(string s) {
         int n = s.size();
-        int start=0;
+        int start = 0;
         int maxLen = 0;
-        if(n==1)return s;
-        for(int i=0;i<n;i++){
-            // odd len palindrome
-            int l=i, r=i;
-            while(l>=0 && r<n && s[l]==s[r]){
-                if(r-l+1 > maxLen){
-                    start = l;
-                    maxLen = r-l+1;
-                }
-                l--;
-                r++;
-            }
 
-            // even len palindrome
-            l=i;
-            r=i+1;
-            while(l>=0 && r<n && s[l]==s[r]){
-                if(r-l+1 > maxLen){
-                    start = l;
-                    maxLen = r-l+1;
+        memset(t, -1, sizeof(t));
+
+        for (int L = 1; L <= n; L++) {
+            for (int i = 0; i + L - 1 < n; i++) {
+                int j = i + L - 1;
+
+                if (i == j) {
+                    t[i][j] = true;
                 }
-                l--;
-                r++;
+                else if (j == i + 1) {
+                    t[i][j] = (s[i] == s[j]);
+                }
+                else {
+                    t[i][j] =
+                        (s[i] == s[j] && t[i + 1][j - 1]);
+                }
+
+                if (t[i][j] && L > maxLen) {
+                    maxLen = L;
+                    start = i;
+                }
             }
         }
 
