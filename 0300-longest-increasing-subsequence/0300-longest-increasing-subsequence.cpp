@@ -10,7 +10,8 @@ public:
 
             if(it == sorted.end()){
                 sorted.push_back(nums[i]); // greatest : so insert it
-            }else{
+            }
+            else{
                 *it = nums[i]; // replace with nums[i]
             }
         }
