@@ -1,9 +1,17 @@
 class Solution {
 public:
     int findTheDistanceValue(vector<int>& arr1, vector<int>& arr2, int d) {
-        auto far = [&](int a) {  // no b in [a - d, a + d]
-            return ranges::all_of(arr2, [&](int b) { return abs(a - b) > d; });
-        };
-        return ranges::count_if(arr1, far);
+        int count = 0;
+        for(auto a: arr1){
+            bool greater = true;
+            for(auto b: arr2){
+                if(abs(a-b) <= d){
+                    greater = false;
+                }
+            }
+            if(greater==true)count++;
+        }
+
+        return count;
     }
 };
