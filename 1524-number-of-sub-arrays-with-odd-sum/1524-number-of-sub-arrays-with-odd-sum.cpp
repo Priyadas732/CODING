@@ -1,27 +1,23 @@
 class Solution {
 public:
+    int MOD = 1e9+7;
     int numOfSubarrays(vector<int>& arr) {
-        const int MOD = 1e9 + 7;
-        int count = 0, prefixSum = 0;
-        // evenCount starts as 1 since the initial sum (0) is even
-        int oddCount = 0, evenCount = 1;
-
-        for (int num : arr) {
-            prefixSum += num;
-            // If current prefix sum is even, add the number of odd subarrays
-            if (prefixSum % 2 == 0) {
-                count += oddCount;
+        int evenCount = 1;
+        int oddCount = 0;
+        int result = 0;
+        int sum = 0;
+        for(int i=0;i<arr.size();i++){
+            sum += arr[i];
+            if(sum%2==0){
                 evenCount++;
-            } else {
-                // If current prefix sum is odd, add the number of even
-                // subarrays
-                count += evenCount;
-                oddCount++;
+                result = (result + oddCount)%MOD;
             }
-
-            count %= MOD;  // To handle large results
+            else{
+                oddCount++;
+                result = (result + evenCount)%MOD;
+            }
+            
         }
-
-        return count;
+        return result;
     }
 };
