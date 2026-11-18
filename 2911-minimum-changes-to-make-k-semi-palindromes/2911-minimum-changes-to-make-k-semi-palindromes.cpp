@@ -1,38 +1,63 @@
 class Solution {
+    static const int MAXN = 205;
+    static vector<int> divisors[MAXN];
+
+    static void precompute() {
+        static bool done = false;
+
+        if (done) return;
+        done = true;
+        for (int d = 1; d < MAXN; d++) {
+            for (int j = 2 * d; j < MAXN; j += d) {
+                divisors[j].push_back(d);
+            }
+        }
+    }
+
 public:
     int minimumChanges(string s, int k) {
-        int n = s.size();
-        const int INF = 1e9;
-        vector<vector<int>> cost(n, vector<int>(n, INF));
-        for (int i = 0; i < n; ++i) {
-            for (int j = i + 1; j < n; ++j) {
-                int L = j - i + 1;
-                int best = INF;
-                for (int d = 1; d < L; ++d) {
-                    if (L % d != 0) continue;
-                    int cur = 0;
-                    int m = L / d;
-                    for (int r = 0; r < d; ++r) {
-                        for (int t = 0; t < m / 2; ++t) {
-                            if (s[i + r + t * d] != s[i + r + (m - 1 - t) * d])
-                                ++cur;
-                        }
+        precompute();
+        int n = (int)s.size();
+        vector<vector<long long>> memo(n, vector<long long>(k + 1, -1));
+
+        auto cost = [&](int start,int end)->long long{
+            int len = end-start+1;
+            int mini = 1e9;
+            for(auto d : divisors[len]){
+                int curr_cost = 0; 
+                for(int grp =0;grp<d;grp++){
+                    int left = start+grp;
+                    int right = left + (len/d-1)*d;
+                    while(left<right){
+                        if(s[left]!=s[right]) curr_cost++;
+                        left+=d;
+                        right-=d;
                     }
-                    best = min(best, cur);
                 }
-                cost[i][j] = best;
+                mini = min(mini, curr_cost);
             }
-        }
-        vector<vector<int>> dp(n + 1, vector<int>(k + 1, INF));
-        dp[0][0] = 0;
-        for (int i = 1; i <= n; ++i) {
-            for (int p = 1; p <= k; ++p) {
-                for (int prev = 0; prev <= i - 2; ++prev) {
-                    if (dp[prev][p - 1] != INF && cost[prev][i - 1] != INF)
-                        dp[i][p] = min(dp[i][p], dp[prev][p - 1] + cost[prev][i - 1]);
-                }
+            return mini;
+        };
+        
+        auto f = [&](auto&& self, int ind, int remainingk)->long long{
+            if(remainingk==0){
+                if(ind==n) return 0;
+                return 1e9;
             }
-        }
-        return dp[n][k];
+            if(ind + (remainingk<<1) > n) return 1e9;
+            if(memo[ind][remainingk] != -1) return memo[ind][remainingk];
+            
+            long long result = 1e9;
+            for(int end= ind+1;end<n;end++){
+                long long remainingcost = self(self, end+1, remainingk-1); 
+                if(remainingcost >= 1e9) continue;
+                result = min(result, cost(ind,end) + remainingcost);
+            }
+            return memo[ind][remainingk] = result;
+        };
+        
+        return f(f,0,k);
     }
 };
+
+vector<int> Solution::divisors[205];
