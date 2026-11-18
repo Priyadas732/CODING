@@ -4,7 +4,6 @@ class Solution {
 
     static void precompute() {
         static bool done = false;
-
         if (done) return;
         done = true;
         for (int d = 1; d < MAXN; d++) {
@@ -18,9 +17,13 @@ public:
     int minimumChanges(string s, int k) {
         precompute();
         int n = (int)s.size();
+        
         vector<vector<long long>> memo(n, vector<long long>(k + 1, -1));
+        vector<vector<int>> costMemo(n, vector<int>(n, -1));
 
         auto cost = [&](int start,int end)->long long{
+            if(costMemo[start][end] != -1) return costMemo[start][end];
+
             int len = end-start+1;
             int mini = 1e9;
             for(auto d : divisors[len]){
@@ -36,7 +39,7 @@ public:
                 }
                 mini = min(mini, curr_cost);
             }
-            return mini;
+            return costMemo[start][end] = mini;
         };
         
         auto f = [&](auto&& self, int ind, int remainingk)->long long{
@@ -45,6 +48,7 @@ public:
                 return 1e9;
             }
             if(ind + (remainingk<<1) > n) return 1e9;
+            
             if(memo[ind][remainingk] != -1) return memo[ind][remainingk];
             
             long long result = 1e9;
