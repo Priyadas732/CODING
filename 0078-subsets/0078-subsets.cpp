@@ -2,21 +2,16 @@ class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
         int n = nums.size();
-        vector<vector<int>>ans;
-        vector<int>v;
-        auto f = [&](auto && self, int idx)->void{
-            if(idx==n){
-                ans.push_back(v);
-                return;
+        int noSubsets = 1<<n;
+        vector<vector<int>>res;
+        for(int num=0;num<noSubsets;num++){
+            vector<int>list;
+            for(int i=0;i<n;i++){
+                if(num & (1<<i))list.push_back(nums[i]);
             }
+            res.push_back(list);
+        }
 
-            self(self,idx+1);
-            v.push_back(nums[idx]);
-            self(self,idx+1);
-            v.pop_back();
-        };
-        
-        f(f,0);
-        return ans;
+        return res;
     }
 };
